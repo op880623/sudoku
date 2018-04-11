@@ -9,31 +9,26 @@ class Sudoku(object):
     def __str__(self):
         self.print()
 
+    def _print(self, attr):
+        print('''\
+%s %s %s  %s %s %s  %s %s %s
+%s %s %s  %s %s %s  %s %s %s
+%s %s %s  %s %s %s  %s %s %s
+
+%s %s %s  %s %s %s  %s %s %s
+%s %s %s  %s %s %s  %s %s %s
+%s %s %s  %s %s %s  %s %s %s
+
+%s %s %s  %s %s %s  %s %s %s
+%s %s %s  %s %s %s  %s %s %s
+%s %s %s  %s %s %s  %s %s %s
+''' % tuple(getattr(self, attr)))
+
     def print(self):
-        for i in range(3):
-            for ii in range(3):
-                x = i * 3 + ii
-                tt = ''
-                for j in range(3):
-                    for jj in range(3):
-                        y = j * 3 + jj
-                        tt = tt + ' ' + str(self.question[x * 9 + y])
-                    tt += ' '
-                print(tt)
-            print('')
+        self._print('question')
 
     def print_answer(self):
-        for i in range(3):
-            for ii in range(3):
-                x = i * 3 + ii
-                tt = ''
-                for j in range(3):
-                    for jj in range(3):
-                        y = j * 3 + jj
-                        tt = tt + ' ' + str(self.answer[x * 9 + y])
-                    tt += ' '
-                print(tt)
-            print('')
+        self._print('answer')
 
     def get_answer(self):
 
