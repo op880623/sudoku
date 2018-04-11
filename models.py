@@ -3,13 +3,11 @@ class Sudoku(object):
     def __init__(self, q):
         if len(q) != 81:
             raise IndexError('question with wrong length.')
-        self.question = []
-        for i in range(len(q)):
-            self.question.append(int(q[i]))
+        self.question = list(map(lambda x: int(x), q))
         self.answer = self.get_answer()
 
     def __str__(self):
-        return 'Sudoku()'
+        self.print()
 
     def print(self):
         for i in range(3):
@@ -43,30 +41,37 @@ class Sudoku(object):
 
             def is_legal(question):
 
-                def is_legal_block(block):
-                    if len(block) != 9:
+                def rows(q):
+                    def row(q, r):
+                        start = r * 9
+                        return [q[start + i] for i in range(9)]
+                    return [row(q, r) for r in range(9)]
+
+                def columns(q):
+                    def column(q, c):
+                        start = c
+                        return [q[start + i * 9] for i in range(9)]
+                    return [column(q, c) for c in range(9)]
+
+                def frames(q):
+                    def frame(q, f):
+                        start = f // 3 * 27 + f % 3 * 3
+                        return [q[start + i // 3 * 9 + i % 3] for i in range(9)]
+                    return [frame(q, f) for f in range(9)]
+
+                def is_legal_block(b):
+                    if len(b) != 9:
                         raise IndexError('block with wrong length.')
-                    s = set(block)
+                    s = set(b)
                     s.discard(0)
-                    return block.count(0) + len(s) == 9
+                    return b.count(0) + len(s) == 9
 
                 if len(question) != 81:
                     raise IndexError('question with wrong length.')
-                for i in range(0, 9):
-                    block = question[i * 9 : i * 9 + 9]
+                blocks = rows(question) + columns(question) + frames(question)
+                for block in blocks:
                     if not is_legal_block(block):
                         return False
-                    block = question[i : i + 73 : 9]
-                    if not is_legal_block(block):
-                        return False
-                for i in range(0, 55, 27):
-                    for j in range(0, 7, 3):
-                        block = []
-                        for ii in range(0, 19, 9):
-                            for jj in range(3):
-                                block.append(question[i+j+ii+jj])
-                        if not is_legal_block(block):
-                            return False
                 return True
 
             def is_completed(question):
